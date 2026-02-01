@@ -1,126 +1,169 @@
-🕵️ Digital Footprint Analyzer
+# 🕵️ Digital Footprint Analyzer
+### Privacy-Focused Offline Analytics System
 
-(Privacy-Focused Offline Analytics System)
+---------------------------------------------------------------------------------
 
-📌 Problem Statement
+## 📌 Problem Statement
 
-In today’s digital world, users spend a significant amount of time on screens, applications, and websites, often without realizing their impact on productivity, privacy, and digital well-being.
-Most analytics tools send personal data to external servers, raising privacy concerns.
+In today’s digital world, users spend a significant amount of time on screens, applications, and websites, often without realizing their impact on productivity, privacy, and digital well-being.  
+Most analytics tools send personal data to external servers, raising serious privacy concerns.
 
-👉 The problem is to analyze a user’s digital activity locally, without sending data anywhere, and provide meaningful insights about screen usage, application behavior, and risky browsing habits.
+👉 The goal of this project is to analyze a user’s digital activity **locally**, without sending data anywhere, and provide **meaningful insights** about screen usage, application behavior, and risky browsing habits.
 
-🎯 Task / Objective
+---
 
-The main task of this project is to:
+##  Objectives
 
-Analyze weekly digital activity logs stored as files
+This project aims to:
 
-Compute:
+- Analyze weekly digital activity logs stored as files  
+- Compute:
+  - Average daily screen time  
+  - Most used application category  
+  - Number of risky website visits  
+- Compare digital behavior between **Week 1** and **Week 2**  
+- Generate insights **offline using Python**  
+- Follow a **clean, scalable, and modular architecture**
 
-Average daily screen time
+---
 
-Most used application category
+##  Features Implemented
 
-Number of risky website visits
+- Scalable and modular folder architecture  
+- Object-Oriented Programming (OOP) for data modeling  
+- File handling for CSV and TXT files  
+- Memory-efficient data streaming using generators  
+- Weekly analytics and behavior comparison  
+- Fully offline processing (privacy-focused)   
 
-Compare digital behavior between Week1 and Week2
+----------------------------------------------------------------------------
+##  Project Structure
 
-Generate insights offline using Python
-
-Follow a clean, scalable, and modular architecture
-
-✅ What I Did in This Project
-
-Designed a scalable folder architecture
-
-Used Object-Oriented Programming (OOP) to model data
-
-Implemented file handling for CSV and TXT files
-
-Applied generators for memory-efficient streaming
-
-Performed weekly analytics and comparisons
-
-Ensured the solution works offline (privacy-focused)
-
-Made the project VS Code and GitHub ready
-
-📁 Project Structure & One-Line Explanation (VERY IMPORTANT)
 digital_footprint_analyzer/
+│
+├── data/
+│ ├── week1/
+│ │ ├── screen_time.csv
+│ │ ├── app_usage.csv
+│ │ └── browsing.txt
+│ └── week2/
+│ ├── screen_time.csv
+│ ├── app_usage.csv
+│ └── browsing.txt
+│
+├── core/
+│ ├── models.py
+│ ├── analyzer.py
+│ ├── insights.py
+│ ├── cache.py
+│ └── exceptions.py
+│
+├── utils/
+│ ├── file_readers.py
+│ └── docstream.py
+│
+└── main.py
 
-🔹 data/
+--------------------------------------------------------------------------------
 
-Stores weekly raw digital activity data files.
+---
 
-week1/ – Contains Week 1 user activity logs
+##  Module Overview
 
-week2/ – Contains Week 2 user activity logs
+###  `data/`
+Stores weekly raw digital activity logs.
 
-🔹 core/models.py
+- `week1/` – Week 1 user activity data  
+- `week2/` – Week 2 user activity data  
 
-Defines OOP models (ScreenTime, AppUsage) to represent structured data.
+---
 
-🔹 core/analyzer.py
+###  `core/models.py`
+Defines OOP data models such as `ScreenTime` and `AppUsage` for structured representation.
 
-Contains core business logic for calculating averages, categories, and risky site counts.
+---
 
-🔹 core/insights.py
+### 🔹 `core/analyzer.py`
+Contains core business logic to calculate:
+- Average screen time  
+- Dominant application category  
+- Risky website visit counts  
 
-Generates readable weekly insights and compares Week1 vs Week2 trends.
+---
 
-🔹 core/cache.py
+###  `core/insights.py`
+Generates readable weekly insights and compares **Week 1 vs Week 2** behavior.
 
-Stores generated weekly reports to avoid recomputation (future scalability).
+---
 
-🔹 core/exceptions.py
+###  `core/cache.py`
+Caches generated reports to avoid recomputation and support future scalability.
 
-Handles custom exceptions for missing or invalid data.
+---
 
-🔹 utils/file_readers.py
+###  `core/exceptions.py`
+Handles custom exceptions for missing, corrupted, or invalid data.
 
-Centralized utility to read CSV and text files safely.
+---
 
-🔹 utils/docstream.py
+###  `utils/file_readers.py`
+Centralized utility for safely reading CSV and TXT files.
 
+---
+
+###  `utils/docstream.py`
 Uses Python generators to stream browsing data efficiently.
 
-🔹 main.py
+---
 
-Main entry point that connects all modules and executes the workflow.
+###  `main.py`
+Main entry point that connects all modules and executes the analysis workflow.
 
-🔁 Overall Workflow (End-to-End)
+---
+-------------------------------------------------------------------------------------------------
+
+##  Workflow
 User Activity Files (CSV / TXT)
-            ↓
+↓
 File Readers (utils)
-            ↓
+↓
 Data Models (OOP)
-            ↓
+↓
 Analyzer (Calculations)
-            ↓
+↓
 Insights Generator
-            ↓
-Week1 vs Week2 Comparison
-            ↓
+↓
+Week 1 vs Week 2 Comparison
+↓
 Final Output in Console
+---------------------------------------------------------------------------------------------------
 
-🧠 Workflow Explained in Simple Steps
+##  How It Works (Simple Steps)
 
-Read screen time, app usage, and browsing history files
+1. Reads screen time, app usage, and browsing history files  
+2. Converts raw data into Python objects using OOP  
+3. Streams browsing history using generators  
+4. Calculates:
+   - Average screen time  
+   - Most used application category  
+   - Risky website visits  
+5. Generates weekly insights  
+6. Compares Week 1 and Week 2 behavior  
+7. Displays results in a clean, readable console output  
 
-Convert raw data into Python objects using OOP
+---
 
-Stream browsing data using generators
+##  Privacy First
 
-Calculate:
+- No internet connection required  
+- No data sent to external servers  
+- All analysis happens locally  
 
-Average screen time
+---
 
-Dominant app category
+##  How to Run
 
-Risky website visits
+```bash
+python main.py
 
-Generate insights for each week
 
-Compare Week1 and Week2 to detect behavioral trends
-
-Display results in a clean, readable format
