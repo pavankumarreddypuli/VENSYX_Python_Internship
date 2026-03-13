@@ -1,0 +1,12 @@
+import customer_insights
+import property_insights
+import demand_insights
+import conversion_insights
+
+customer_insights.most_active_customers()
+
+property_insights.average_price_by_state()
+
+demand_insights.most_wishlisted_properties()
+
+conversion_insights.conversion_funnel()
