@@ -1,3 +1,5 @@
+#This file loads all datasets once so every insight file can reuse them.
+
 import pandas as pd
 
 def load_datasets():
@@ -10,3 +12,4 @@ def load_datasets():
     contact = pd.read_csv("data/customer_contact_owner.csv")
 
     return properties, customers, search, wishlist, visits, contact
+

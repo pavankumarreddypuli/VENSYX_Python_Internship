@@ -1,3 +1,7 @@
+
+# Insights:
+# Search → Wishlist → Visit → Contact
+
 from load_data import load_datasets
 
 properties, customers, search, wishlist, visits, contact = load_datasets()
