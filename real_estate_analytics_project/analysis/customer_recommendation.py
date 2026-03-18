@@ -99,4 +99,3 @@ def recommend_properties(customer_id):
         "location_score",
         "final_score"
     ]])
-    print(customers.columns)
