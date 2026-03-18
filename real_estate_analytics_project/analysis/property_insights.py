@@ -3,6 +3,7 @@ from load_data import load_datasets
 # Load all datasets
 properties, customers, search, wishlist, visits, contact = load_datasets()
 
+#Best Overall Properties
 
 def best_properties():
 
@@ -130,3 +131,68 @@ def best_family_properties():
 
     print("\n------------------Best Family Properties---------------")
     print(best[["property_id", "bedrooms", "bathrooms", "nearby_schools_km"]])
+
+
+
+def best_hybrid_properties():
+
+    df = properties.copy()
+
+    # 1. DATA CLEANING
+    df = df[(df["price"] > 0) & (df["house_size_sqft"] > 0)]
+
+    # 2. NORMALIZATION (0–1)
+
+    # Price (lower is better)
+    df["price_score"] = (df["price"].max() - df["price"]) / (df["price"].max() - df["price"].min())
+
+    # Size (higher is better)
+    df["size_score"] = (df["house_size_sqft"] - df["house_size_sqft"].min()) / \
+                       (df["house_size_sqft"].max() - df["house_size_sqft"].min())
+
+    # Safety (lower crime better)
+    df["safety_score"] = (df["crime_rate_index"].max() - df["crime_rate_index"]) / \
+                         (df["crime_rate_index"].max() - df["crime_rate_index"].min())
+
+    # Location components
+    df["metro_score"] = 1 / (df["metro_distance_km"] + 1)
+    df["school_score"] = 1 / (df["nearby_schools_km"] + 1)
+    df["hospital_score"] = 1 / (df["nearby_hospitals_km"] + 1)
+
+    # Weighted location score
+    df["location_score"] = (
+        0.5 * df["metro_score"] +
+        0.3 * df["school_score"] +
+        0.2 * df["hospital_score"]
+    )
+
+    # 3. FINAL HYBRID WEIGHTS
+
+    weights = {
+        "price": 0.25,
+        "size": 0.20,
+        "location": 0.30,
+        "safety": 0.25
+    }
+
+    # 4. FINAL SCORE
+
+    df["final_score"] = (
+        df["price_score"] * weights["price"] +
+        df["size_score"] * weights["size"] +
+        df["location_score"] * weights["location"] +
+        df["safety_score"] * weights["safety"]
+    )
+    # 5. RANKING
+
+    top = df.sort_values(by="final_score", ascending=False).head(5)
+
+    print("\n----------- HYBRID BEST PROPERTIES ---------------")
+    print(top[[
+        "property_id",
+        "price",
+        "house_size_sqft",
+        "crime_rate_index",
+        "location_score",
+        "final_score"
+    ]])   
