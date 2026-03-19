@@ -1,5 +1,6 @@
 from load_data import load_datasets
 import numpy as np
+import pandas as pd
 
 # Load datasets
 properties, customers, search, wishlist, visits, contact = load_datasets()
@@ -81,24 +82,39 @@ def recommend_properties(customer_id):
 
     #DIVERSITY (VERY IMPORTANT)
 
-    df["diversity_score"] = np.random.uniform(0, 0.05, len(df))
+    # STATE DIVERSITY
+    state_counts = df["state"].value_counts().to_dict()
+    df["state_diversity"] = df["state"].apply(lambda x: 1 / state_counts[x]).astype(float)
 
+    # PRICE DIVERSITY
+    df["price_bucket"] = pd.qcut(df["price"], q=3, labels=["low", "mid", "high"], duplicates="drop")
+    price_counts = df["price_bucket"].value_counts().to_dict()
+    df["price_diversity"] = df["price_bucket"].apply(lambda x: 1 / price_counts[x]).astype(float)
+
+    # SIZE DIVERSITY
+    df["size_bucket"] = pd.qcut(df["house_size_sqft"], q=3, labels=["small", "medium", "large"], duplicates="drop")
+    size_counts = df["size_bucket"].value_counts().to_dict()
+    df["size_diversity"] = df["size_bucket"].apply(lambda x: 1 / size_counts[x]).astype(float)
     #FINAL HYBRID SCORE
 
     df["final_score"] = (
-        0.25 * df["price_score"] +
-        0.20 * df["size_score"] +
-        0.25 * df["location_score"] +
-        0.20 * df["safety_score"] +
-        0.05 * df["state_score"] +
-        df["diversity_score"]
-    )
+    0.25 * df["price_score"] +
+    0.20 * df["size_score"] +
+    0.25 * df["location_score"] +
+    0.20 * df["safety_score"] +
+    0.05 * df["state_score"] +
+    
+    # SMART DIVERSITY
+    0.02 * df["state_diversity"] +
+    0.015 * df["price_diversity"] +
+    0.015 * df["size_diversity"]
+)
 
     #TOP RECOMMENDATIONS
 
     top = df.sort_values(by="final_score", ascending=False).head(10)
 
-    print("\n---------- SMART PERSONALIZED RECOMMENDATIONS -----------")
+    print("\n---------- SMART RECOMMENDATIONS -----------")
     print(top[[
         "property_id",
         "state",
