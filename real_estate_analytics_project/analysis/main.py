@@ -1,6 +1,7 @@
 import property_insights
-import customer_recommendation
+import customers_recommendation
 from load_data import load_datasets
+
 
 # Load datasets
 properties, customers, search, wishlist, visits, contact = load_datasets()
@@ -12,4 +13,4 @@ property_insights.safest_properties()
 property_insights.best_family_properties()
 property_insights.best_hybrid_properties()
 # Example customer
-customer_recommendation.recommend_properties("C0000110")
+customers_recommendation.recommend_properties("C0000110")
