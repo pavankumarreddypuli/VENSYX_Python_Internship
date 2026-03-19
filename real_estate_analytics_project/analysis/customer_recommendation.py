@@ -9,17 +9,13 @@ def recommend_properties(customer_id):
 
     print(f"\nRecommendations for Customer: {customer_id}")
 
-    # ----------------------------
-    # 1. GET CUSTOMER HISTORY
-    # ----------------------------
+    #GET CUSTOMER HISTORY
 
     user_search = search[search["customer_id"] == customer_id]
     user_wishlist = wishlist[wishlist["customer_id"] == customer_id]
     user_visits = visits[visits["customer_id"] == customer_id]
 
-    # ----------------------------
-    # 2. GET INTERESTED PROPERTIES
-    # ----------------------------
+    #GET INTERESTED PROPERTIES
 
     interested_props = set(user_search["property_id"]) | \
                        set(user_wishlist["property_id"]) | \
@@ -31,9 +27,7 @@ def recommend_properties(customer_id):
 
     user_df = df[df["property_id"].isin(interested_props)]
 
-    # ----------------------------
     # 3. FIND PREFERRED PATTERN
-    # ----------------------------
 
     avg_price = user_df["price"].mean()
     avg_size = user_df["house_size_sqft"].mean()
@@ -43,9 +37,7 @@ def recommend_properties(customer_id):
     print(f"Preferred Size: {int(avg_size)}")
     print(f"Preferred State: {preferred_state}")
 
-    # ----------------------------
     # 4. FILTER SIMILAR PROPERTIES
-    # ----------------------------
 
     df = df[
         (df["price"].between(0.8 * avg_price, 1.2 * avg_price)) &
@@ -57,9 +49,7 @@ def recommend_properties(customer_id):
         print("No matching properties found!")
         return
 
-    # ----------------------------
     # 5. SCORING (HYBRID)
-    # ----------------------------
 
     df["price_score"] = (df["price"].max() - df["price"]) / (df["price"].max() - df["price"].min())
     df["size_score"] = (df["house_size_sqft"] - df["house_size_sqft"].min()) / \
@@ -81,13 +71,11 @@ def recommend_properties(customer_id):
         0.2 * df["safety_score"]
     )
 
-    # ----------------------------
     # 6. FINAL RECOMMENDATIONS
-    # ----------------------------
 
     top = df.sort_values(by="final_score", ascending=False).head(5)
 
-    print("\n🔥 Personalized Recommendations (Behavior-Based) 🔥")
+    print("\n-----------------Personalized Recommendations (Behavior-Based)------------------")
     print(top[[
         "property_id",
         "state",

@@ -11,6 +11,5 @@ property_insights.best_location_properties()
 property_insights.safest_properties()
 property_insights.best_family_properties()
 property_insights.best_hybrid_properties()
-print(customers.columns)
 # Example customer
 customer_recommendation.recommend_properties("C0000012")
