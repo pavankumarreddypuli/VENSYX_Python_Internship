@@ -80,13 +80,22 @@ def recommend_properties(customer_id):
 
     df["state_score"] = (df["state"] == preferred_state).astype(int)
 
-    #DIVERSITY (VERY IMPORTANT)
+    #DIVERSITY BOOST
+    '''To avoid showing only similar properties
+       We boost rare features
+       Instead of: Only cheap products 
+       It shows: Cheap + premium + mid 
+       Rare gets boosted to ensure diversity, 
+       avoid bias, and allow users to discover 
+       new relevant options instead of seeing repetitive recommendations'''
 
     # STATE DIVERSITY
+
     state_counts = df["state"].value_counts().to_dict()
     df["state_diversity"] = df["state"].apply(lambda x: 1 / state_counts[x]).astype(float)
 
     # PRICE DIVERSITY
+    #qcut = Splits data into equal-sized groups
     df["price_bucket"] = pd.qcut(df["price"], q=3, labels=["low", "mid", "high"], duplicates="drop")
     price_counts = df["price_bucket"].value_counts().to_dict()
     df["price_diversity"] = df["price_bucket"].apply(lambda x: 1 / price_counts[x]).astype(float)
@@ -95,6 +104,7 @@ def recommend_properties(customer_id):
     df["size_bucket"] = pd.qcut(df["house_size_sqft"], q=3, labels=["small", "medium", "large"], duplicates="drop")
     size_counts = df["size_bucket"].value_counts().to_dict()
     df["size_diversity"] = df["size_bucket"].apply(lambda x: 1 / size_counts[x]).astype(float)
+    
     #FINAL HYBRID SCORE
 
     df["final_score"] = (
